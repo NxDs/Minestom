@@ -1028,16 +1028,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Calls an {@link ItemDropEvent} with a specified item.
+     * Calls an {@link ItemDropEvent} with a specified item, drop reason, and drop amount.
      * <p>
      * Returns false if {@code item} is air.
      *
      * @param item the item to drop
+     * @param reason The reason why this ItemStack was dropped
+     * @param amount The status of the amount of items, SINGLE for a single item, and STACK for the entire ItemStack
      * @return true if player can drop the item (event not cancelled), false otherwise
      */
-    public boolean dropItem(@NotNull ItemStack item) {
+    public boolean dropItem(@NotNull ItemStack item, ItemDropEvent.DropReason reason, ItemDropEvent.DropAmount amount) {
         if (item.isAir()) return false;
-        ItemDropEvent itemDropEvent = new ItemDropEvent(this, item);
+        ItemDropEvent itemDropEvent = new ItemDropEvent(this, item, reason, amount);
         EventDispatcher.call(itemDropEvent);
         return !itemDropEvent.isCancelled();
     }
@@ -1458,7 +1460,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
         if (!cursorItem.isAir()) {
             // Add item to inventory if he hasn't been able to drop it
-            if (!dropItem(cursorItem)) {
+            if (!dropItem(cursorItem, ItemDropEvent.DropReason.CLOSED_INVENTORY, ItemDropEvent.DropAmount.STACK)) {
                 getInventory().addItemStack(cursorItem);
             }
         }
