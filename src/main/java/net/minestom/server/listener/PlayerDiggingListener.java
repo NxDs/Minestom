@@ -15,6 +15,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
+import net.minestom.server.item.drop.DropReason;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import org.jetbrains.annotations.NotNull;
@@ -177,7 +178,7 @@ public final class PlayerDiggingListener {
     private static void dropItem(@NotNull Player player,
                                  @NotNull ItemStack droppedItem, @NotNull ItemStack handItem, @NotNull ItemDropEvent.DropAmount amount) {
         final PlayerInventory playerInventory = player.getInventory();
-        if (player.dropItem(droppedItem, ItemDropEvent.DropReason.HOTBAR, amount)) {
+        if (player.dropItem(droppedItem, DropReason.fromHotbar(player.getHeldSlot()), amount)) {
             playerInventory.setItemInMainHand(handItem);
         } else {
             playerInventory.update();

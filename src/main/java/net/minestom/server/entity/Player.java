@@ -42,6 +42,7 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.drop.DropReason;
 import net.minestom.server.item.metadata.WrittenBookMeta;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatMessageType;
@@ -1037,7 +1038,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param amount The status of the amount of items, SINGLE for a single item, and STACK for the entire ItemStack
      * @return true if player can drop the item (event not cancelled), false otherwise
      */
-    public boolean dropItem(@NotNull ItemStack item, ItemDropEvent.DropReason reason, ItemDropEvent.DropAmount amount) {
+    public boolean dropItem(@NotNull ItemStack item, DropReason reason, ItemDropEvent.DropAmount amount) {
         if (item.isAir()) return false;
         ItemDropEvent itemDropEvent = new ItemDropEvent(this, item, reason, amount);
         EventDispatcher.call(itemDropEvent);
@@ -1460,7 +1461,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
         if (!cursorItem.isAir()) {
             // Add item to inventory if he hasn't been able to drop it
-            if (!dropItem(cursorItem, ItemDropEvent.DropReason.CLOSED_INVENTORY, ItemDropEvent.DropAmount.STACK)) {
+            if (!dropItem(cursorItem, DropReason.fromInventoryClose(), ItemDropEvent.DropAmount.STACK)) {
                 getInventory().addItemStack(cursorItem);
             }
         }

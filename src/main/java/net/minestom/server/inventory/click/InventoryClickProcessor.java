@@ -15,6 +15,7 @@ import net.minestom.server.inventory.condition.InventoryConditionResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.StackingRule;
+import net.minestom.server.item.drop.DropReason;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -368,7 +369,7 @@ public final class InventoryClickProcessor {
                 // Left (drop all)
                 final int amount = rule.getAmount(resultCursor);
                 final ItemStack dropItem = rule.apply(resultCursor, amount);
-                final boolean dropResult = player.dropItem(dropItem, ItemDropEvent.DropReason.INVENTORY, ItemDropEvent.DropAmount.STACK);
+                final boolean dropResult = player.dropItem(dropItem, DropReason.fromInventory(inventory), ItemDropEvent.DropAmount.STACK);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
                     resultCursor = rule.apply(resultCursor, 0);
@@ -376,7 +377,7 @@ public final class InventoryClickProcessor {
             } else if (button == 1) {
                 // Right (drop 1)
                 final ItemStack dropItem = rule.apply(resultCursor, 1);
-                final boolean dropResult = player.dropItem(dropItem, ItemDropEvent.DropReason.INVENTORY, ItemDropEvent.DropAmount.SINGLE);
+                final boolean dropResult = player.dropItem(dropItem, DropReason.fromInventory(inventory), ItemDropEvent.DropAmount.SINGLE);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
                     final int amount = rule.getAmount(resultCursor);
@@ -389,7 +390,7 @@ public final class InventoryClickProcessor {
             if (button == 0) {
                 // Drop key Q (drop 1)
                 final ItemStack dropItem = rule.apply(resultClicked, 1);
-                final boolean dropResult = player.dropItem(dropItem, ItemDropEvent.DropReason.INVENTORY, ItemDropEvent.DropAmount.SINGLE);
+                final boolean dropResult = player.dropItem(dropItem, DropReason.fromInventory(inventory), ItemDropEvent.DropAmount.SINGLE);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
                     final int amount = rule.getAmount(resultClicked);
@@ -400,7 +401,7 @@ public final class InventoryClickProcessor {
                 // Ctrl + Drop key Q (drop all)
                 final int amount = rule.getAmount(resultClicked);
                 final ItemStack dropItem = rule.apply(resultClicked, amount);
-                final boolean dropResult = player.dropItem(dropItem, ItemDropEvent.DropReason.INVENTORY, ItemDropEvent.DropAmount.STACK);
+                final boolean dropResult = player.dropItem(dropItem, DropReason.fromInventory(inventory), ItemDropEvent.DropAmount.STACK);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
                     resultClicked = rule.apply(resultClicked, 0);
