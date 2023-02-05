@@ -1,6 +1,8 @@
 package net.minestom.server.entity.player;
 
 import net.minestom.server.event.player.PlayerGameModeChangeEvent;
+import net.minestom.server.message.ChatMessageType;
+import net.minestom.server.network.packet.client.play.ClientSettingsPacket;
 import net.minestom.testing.Collector;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
