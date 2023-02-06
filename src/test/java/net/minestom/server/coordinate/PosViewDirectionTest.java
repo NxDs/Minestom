@@ -4,6 +4,7 @@ import net.minestom.server.utils.Direction;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PosViewDirectionTest {
     private static final float EPSILON = 0.01f;
@@ -63,7 +64,7 @@ public class PosViewDirectionTest {
 
         assertEquals(Direction.UP, pos.withYaw(123456).withPitch(-90).facing());
 
-        // edges
+        // Edges
         assertEquals(Direction.SOUTH, pos.withYaw(45).facing());
 
         assertEquals(Direction.NORTH, pos.withYaw(-135).facing());
@@ -71,5 +72,8 @@ public class PosViewDirectionTest {
         assertEquals(Direction.EAST, pos.withYaw(-45).facing());
 
         assertEquals(Direction.WEST, pos.withYaw(135).facing());
+
+        // Invalid
+        assertThrows(IllegalStateException.class, () -> pos.withYaw(Float.NaN).facing());
     }
 }
