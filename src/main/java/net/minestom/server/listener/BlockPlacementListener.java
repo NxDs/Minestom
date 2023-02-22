@@ -136,7 +136,7 @@ public class BlockPlacementListener {
         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
         if (blockPlacementRule != null) {
             // Get id from block placement rule instead of the event
-            resultBlock = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player, cursorPosition);
+            resultBlock = blockPlacementRule.blockPlace(instance, usedItem.meta(), resultBlock, blockFace, blockPosition, player, cursorPosition);
         }
         if (resultBlock == null) {
             refresh(player, chunk);
