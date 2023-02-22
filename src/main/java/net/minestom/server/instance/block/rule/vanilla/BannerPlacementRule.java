@@ -22,7 +22,7 @@ public class BannerPlacementRule extends BlockPlacementRule {
     @Override
     public Block blockPlace(@NotNull Instance instance,
                             @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Point blockPosition,
-                            @NotNull Player pl) {
+                            @NotNull Player pl, @NotNull Point cursorPosition) {
         float yaw = pl.getPosition().yaw() + 180;
         int rotation = (int) (Math.round(yaw / 22.5d) % 16);
 

@@ -3,10 +3,7 @@ package net.minestom.server.extras;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.rule.vanilla.AxisPlacementRule;
-import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
-import net.minestom.server.instance.block.rule.vanilla.StairsPlacementRule;
-import net.minestom.server.instance.block.rule.vanilla.WallPlacementRule;
+import net.minestom.server.instance.block.rule.vanilla.*;
 
 public final class PlacementRules {
 
@@ -22,6 +19,8 @@ public final class PlacementRules {
         initStairs();
         initWalls();
         initRedstone();
+        initHeads();
+        initBanners();
     }
 
     /**
@@ -68,5 +67,29 @@ public final class PlacementRules {
     public static void initRedstone() {
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new RedstonePlacementRule());
+    }
+
+    /**
+     * Register the placement rules for Heads and Skulls.
+     */
+    public static void initHeads() {
+        BlockManager blockManager = MinecraftServer.getBlockManager();
+        for (Block block : Block.values()) {
+            if ("minecraft:skull".equals(block.registry().blockEntity())) {
+                blockManager.registerBlockPlacementRule(new HeadPlacementRule(block));
+            }
+        }
+    }
+
+    /**
+     * Register the placement rules for banners.
+     */
+    public static void initBanners() {
+        BlockManager blockManager = MinecraftServer.getBlockManager();
+        for (Block block : Block.values()) {
+            if ("minecraft:banner".equals(block.registry().blockEntity())) {
+                blockManager.registerBlockPlacementRule(new BannerPlacementRule(block));
+            }
+        }
     }
 }

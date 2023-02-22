@@ -30,15 +30,9 @@ public class HeadPlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public Block blockPlace(@NotNull Instance instance,
-                            @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Point blockPosition,
-                            @NotNull Player pl) {
-        return block;
-    }
-
-    @Override
     public @Nullable Block blockPlace(@NotNull Instance instance, ItemMeta usedItemMeta, @NotNull Block block,
-                                      @NotNull BlockFace blockFace, @NotNull Point blockPosition, @NotNull Player pl) {
+                                      @NotNull BlockFace blockFace, @NotNull Point blockPosition, @NotNull Player pl,
+                                      @NotNull Point cursorPosition) {
 
         if (blockFace == BlockFace.TOP || blockFace == BlockFace.BOTTOM) {
             float yaw = pl.getPosition().yaw() + 360;
@@ -63,7 +57,7 @@ public class HeadPlacementRule extends BlockPlacementRule {
         String name = block.namespace().value();
 
         // player_head -> player
-        String rawName = name.substring(0, name.indexOf("_"));
+        String rawName = name.substring(0, name.lastIndexOf("_"));
         // player_head -> _head
         String rawType = name.substring(rawName.length());
 

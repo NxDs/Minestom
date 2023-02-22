@@ -64,18 +64,19 @@ public abstract class BlockPlacementRule {
     /**
      * Called when the block is placed.
      *
-     * @param instance      the instance of the block
-     * @param usedItemMeta  the meta of the item placed
-     * @param block         the block placed
-     * @param blockFace     the block face
-     * @param blockPosition the block position
-     * @param pl            the player who placed the block
+     * @param instance       the instance of the block
+     * @param usedItemMeta   the meta of the item placed
+     * @param block          the block placed
+     * @param blockFace      the block face
+     * @param blockPosition  the block position
+     * @param pl             the player who placed the block
+     * @param cursorPosition the position of the cursor on the clicked block
      * @return the block to place, {@code null} to cancel
      */
     public @Nullable Block blockPlace(@NotNull Instance instance, ItemMeta usedItemMeta,
                                       @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Point blockPosition,
-                                      @NotNull Point cursorPosition,
-                                      @NotNull Player pl) {
+                                      @NotNull Player pl,
+                                      @NotNull Point cursorPosition) {
         return blockPlace(instance, block, blockFace, blockPosition, pl, cursorPosition);
     }
 
