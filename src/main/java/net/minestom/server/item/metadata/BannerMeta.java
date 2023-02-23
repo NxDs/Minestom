@@ -29,8 +29,8 @@ public record BannerMeta(TagReadable readable) implements ItemMetaView<BannerMet
 
     private static final Tag<Component> CUSTOM_NAME = Tag.Component("CustomName")
             .path("BlockEntityTag");
-    private static final Tag<List<Pattern>> PATTERNS = Tag.Structure("Patterns",
-            TagSerializer.fromCompound(Pattern::fromCompound, Pattern::asCompound))
+    public static final Tag<List<Pattern>> PATTERNS = Tag.Structure("Patterns",
+                    TagSerializer.fromCompound(Pattern::fromCompound, Pattern::asCompound))
             .path("BlockEntityTag").list().defaultValue(List.of());
 
     /**

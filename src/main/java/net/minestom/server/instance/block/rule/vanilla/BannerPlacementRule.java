@@ -6,6 +6,8 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
+import net.minestom.server.item.ItemMeta;
+import net.minestom.server.item.metadata.BannerMeta;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,9 +23,10 @@ public class BannerPlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public Block blockPlace(@NotNull Instance instance,
+    public Block blockPlace(@NotNull Instance instance, ItemMeta usedItemMeta,
                             @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Point blockPosition,
-                            @NotNull Player pl) {
+                            @NotNull Player pl,
+                            @NotNull Point cursorPosition) {
         // Can't place at the bottom of a block
         if (blockFace == BlockFace.BOTTOM) {
             return null;
@@ -33,10 +36,10 @@ public class BannerPlacementRule extends BlockPlacementRule {
             float yaw = pl.getPosition().yaw() + 180;
             int rotation = (int) (Math.round(yaw / 22.5d) % 16);
 
-            return withBannerData(block).withProperty("rotation", String.valueOf(rotation));
+            return withBannerData(block, usedItemMeta).withProperty("rotation", String.valueOf(rotation));
         }
 
-        return withBannerData(toWallBlock(block))
+        return withBannerData(toWallBlock(block), usedItemMeta)
                 .withProperty("facing", blockFace.name().toLowerCase());
     }
 
@@ -50,10 +53,8 @@ public class BannerPlacementRule extends BlockPlacementRule {
         return Block.fromNamespaceId(NamespaceID.from(block.namespace().domain(), rawName + "_wall_banner"));
     }
 
-    private Block withBannerData(Block block/*, BannerMeta meta*/) {
-        // TODO missing banner meta, waiting for https://github.com/Minestom/Minestom/pull/1274
-        //  Also missing ItemMeta from placeBlock() in https://github.com/Minestom/Minestom/pull/1758
-        return block;
+    private Block withBannerData(Block block, ItemMeta meta) {
+        return block.withTag(BannerMeta.PATTERNS, meta.getTag(BannerMeta.PATTERNS));
     }
 
 }
