@@ -108,4 +108,13 @@ public final class PacketListenerManager {
         this.listeners.put(packetClass, consumer);
     }
 
+    /**
+     * Return a copy of the listeners map.
+     *
+     * @return the listeners map
+     */
+    public Map<Class<? extends ClientPacket>, PacketListenerConsumer> getListeners() {
+        return Map.copyOf(listeners);
+    }
+
 }
