@@ -893,7 +893,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
         AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(instance, this);
         EventDispatcher.call(event);
-        if (event.isCancelled()) return null; // TODO what to return?
+        if (event.isCancelled()) return AsyncUtils.VOID_FUTURE;
 
         if (previousInstance != null) removeFromInstance(previousInstance);
 
