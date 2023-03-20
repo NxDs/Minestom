@@ -42,6 +42,7 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.drop.DropReason;
 import net.minestom.server.item.metadata.WrittenBookMeta;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatMessageType;
@@ -444,7 +445,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setOnFire(false);
         refreshHealth();
         sendPacket(new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
-               0, gameMode, gameMode, false, levelFlat, true));
+                0, gameMode, gameMode, false, levelFlat, true));
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
         EventDispatcher.call(respawnEvent);
@@ -1042,16 +1043,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Calls an {@link ItemDropEvent} with a specified item.
+     * Calls an {@link ItemDropEvent} with a specified item, drop reason, and drop amount.
      * <p>
      * Returns false if {@code item} is air.
      *
      * @param item the item to drop
+     * @param reason The reason why this ItemStack was dropped
+     * @param amount The status of the amount of items, SINGLE for a single item, and STACK for the entire ItemStack
      * @return true if player can drop the item (event not cancelled), false otherwise
      */
-    public boolean dropItem(@NotNull ItemStack item) {
+    public boolean dropItem(@NotNull ItemStack item, DropReason reason, ItemDropEvent.DropAmount amount) {
         if (item.isAir()) return false;
-        ItemDropEvent itemDropEvent = new ItemDropEvent(this, item);
+        ItemDropEvent itemDropEvent = new ItemDropEvent(this, item, reason, amount);
         EventDispatcher.call(itemDropEvent);
         return !itemDropEvent.isCancelled();
     }
@@ -1286,8 +1289,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Changes the player {@link GameMode}
      *
      * @param gameMode the new player GameMode
+     * @return true if the gamemode was changed successfully, false otherwise (cancelled by event)
      */
-    public void setGameMode(@NotNull GameMode gameMode) {
+    public boolean setGameMode(@NotNull GameMode gameMode) {
+        PlayerGameModeChangeEvent playerGameModeChangeEvent = new PlayerGameModeChangeEvent(this, gameMode);
+        EventDispatcher.call(playerGameModeChangeEvent);
+        if (playerGameModeChangeEvent.isCancelled()) {
+            // Abort
+            return false;
+        }
+
+        gameMode = playerGameModeChangeEvent.getNewGameMode();
+
         this.gameMode = gameMode;
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
@@ -1320,6 +1333,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (isActive()) {
             refreshAbilities();
         }
+
+        return true;
     }
 
     /**
@@ -1472,7 +1487,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
         if (!cursorItem.isAir()) {
             // Add item to inventory if he hasn't been able to drop it
-            if (!dropItem(cursorItem)) {
+            if (!dropItem(cursorItem, DropReason.fromInventoryClose(), ItemDropEvent.DropAmount.STACK)) {
                 getInventory().addItemStack(cursorItem);
             }
         }
@@ -1531,16 +1546,28 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.receivedTeleportId = receivedTeleportId;
     }
 
+    @Override
+    protected void synchronizePosition(boolean includeSelf) {
+        synchronizePosition(includeSelf, false);
+    }
+
     /**
-     * @see Entity#synchronizePosition(boolean)
+     * @see Entity#synchronizePosition(boolean, boolean)
      */
     @Override
     @ApiStatus.Internal
-    protected void synchronizePosition(boolean includeSelf) {
+    protected void synchronizePosition(boolean includeSelf, boolean relativePosition) {
         if (includeSelf) {
-            sendPacket(new PlayerPositionAndLookPacket(position, (byte) 0x00, getNextTeleportId(), false));
+            Pos pos = position;
+            byte flag = PlayerPositionAndLookPacket.FLAG_ABSOLUTE;
+            if (relativePosition) {
+                pos = position.sub(previousPosition)
+                        .withView(position.yaw() - previousPosition.yaw(), position.pitch() - previousPosition.pitch());
+                flag = PlayerPositionAndLookPacket.FLAG_RELATIVE;
+            }
+            sendPacket(new PlayerPositionAndLookPacket(pos, flag, getNextTeleportId(), false));
         }
-        super.synchronizePosition(includeSelf);
+        super.synchronizePosition(includeSelf, relativePosition);
     }
 
     /**

@@ -6,6 +6,8 @@ import net.minestom.server.command.builder.CommandResult;
 import net.minestom.server.command.builder.ParsedCommand;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.command.CommandEvent;
+import net.minestom.server.event.command.ConsoleCommandEvent;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.callback.CommandCallback;
@@ -99,14 +101,21 @@ public final class CommandManager {
      */
     public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
         command = command.trim();
+
         // Command event
+        CommandEvent event = null;
         if (sender instanceof Player player) {
-            PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, command);
-            EventDispatcher.call(playerCommandEvent);
-            if (playerCommandEvent.isCancelled())
-                return CommandResult.of(CommandResult.Type.CANCELLED, command);
-            command = playerCommandEvent.getCommand();
+            event = new PlayerCommandEvent(player, command);
+        } else if (sender instanceof ConsoleSender console) {
+            event = new ConsoleCommandEvent(console, command);
         }
+        if (event != null) {
+            EventDispatcher.call(event);
+            if (event.isCancelled())
+                return CommandResult.of(CommandResult.Type.CANCELLED, command);
+            command = event.getCommand();
+        }
+
         // Process the command
         final CommandParser.Result parsedCommand = parseCommand(command);
         final ExecutableCommand executable = parsedCommand.executable();
