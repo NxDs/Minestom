@@ -644,7 +644,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param updateChunks  true if chunks should be refreshed, false if the new instance shares the same
      *                      chunks
      */
-    private void spawnPlayer(@NotNull Instance instance, @NotNull Pos spawnPosition,
+    protected void spawnPlayer(@NotNull Instance instance, @NotNull Pos spawnPosition,
                              boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
         if (!firstSpawn) {
             // Player instance changed, clear current viewable collections
