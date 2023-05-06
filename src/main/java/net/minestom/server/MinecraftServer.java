@@ -267,14 +267,6 @@ public final class MinecraftServer {
         MinecraftServer.compressionThreshold = compressionThreshold;
     }
 
-    /**
-     * Gets if the built in Minestom terminal is enabled.
-     *
-     * @return true if the terminal is enabled
-     */
-    public static boolean isTerminalEnabled() {
-        return terminalEnabled;
-    }
 
     /**
      * Enabled/disables the built in Minestom terminal.
