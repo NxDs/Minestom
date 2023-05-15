@@ -9,6 +9,8 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.player.PlayerBlockHitEvent;
+import net.minestom.server.event.player.PlayerCancelDiggingEvent;
+import net.minestom.server.event.player.PlayerFinishDiggingEvent;
 import net.minestom.server.event.player.PlayerStartDiggingEvent;
 import net.minestom.server.event.player.PlayerSwapItemEvent;
 import net.minestom.server.instance.Instance;
@@ -36,7 +38,7 @@ public final class PlayerDiggingListener {
             diggingResult = startDigging(player, instance, blockPosition, packet.blockFace());
         } else if (status == ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING) {
             if (!instance.isChunkLoaded(blockPosition)) return;
-            diggingResult = cancelDigging(instance, blockPosition);
+            diggingResult = cancelDigging(player, instance, blockPosition);
         } else if (status == ClientPlayerDiggingPacket.Status.FINISHED_DIGGING) {
             if (!instance.isChunkLoaded(blockPosition)) return;
             diggingResult = finishDigging(player, instance, blockPosition, packet.blockFace());
@@ -86,8 +88,10 @@ public final class PlayerDiggingListener {
         return breakBlock(instance, player, blockPosition, block, blockFace);
     }
 
-    private static DiggingResult cancelDigging(Instance instance, Point blockPosition) {
+    private static DiggingResult cancelDigging(Player player, Instance instance, Point blockPosition) {
         final Block block = instance.getBlock(blockPosition);
+        PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, blockPosition);
+        EventDispatcher.call(playerCancelDiggingEvent);
         return new DiggingResult(block, true);
     }
 
@@ -98,7 +102,10 @@ public final class PlayerDiggingListener {
             return new DiggingResult(block, false);
         }
 
-        return breakBlock(instance, player, blockPosition, block, blockFace);
+        PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, block, blockPosition);
+        EventDispatcher.call(playerFinishDiggingEvent);
+
+        return breakBlock(instance, player, blockPosition, playerFinishDiggingEvent.getBlock(), blockFace);
     }
 
     private static boolean shouldPreventBreaking(@NotNull Player player, Block block) {
