@@ -53,7 +53,8 @@ public class Main {
         commandManager.register(new GamemodeCommand());
         commandManager.register(new ExecuteCommand());
         commandManager.register(new RedirectTestCommand());
-        commandManager.register(new DebugGridCommand());
+        commandManager.register(new DisplayCommand());
+
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 

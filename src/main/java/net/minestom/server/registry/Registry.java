@@ -143,6 +143,7 @@ public final class Registry {
         POTION_TYPES("potions.json"),
         PARTICLES("particles.json"),
         BANNER_PATTERNS("banner_patterns.json"),
+        DAMAGE_TYPES("damage_types.json"),
 
         BLOCK_TAGS("tags/block_tags.json"),
         ENTITY_TYPE_TAGS("tags/entity_type_tags.json"),
@@ -403,10 +404,10 @@ public final class Registry {
                     main.getInt("id"),
                     main.getString("translationKey"),
                     main.getDouble("maxLevel"),
-                    main.getBoolean("curse", false),
-                    main.getBoolean("discoverable", true),
-                    main.getBoolean("tradeable", true),
-                    main.getBoolean("treasureOnly", false),
+                    main.getBoolean("isCursed", false),
+                    main.getBoolean("isDiscoverable", true),
+                    main.getBoolean("isTradeable", true),
+                    main.getBoolean("isTreasureOnly", false),
                     custom);
         }
     }

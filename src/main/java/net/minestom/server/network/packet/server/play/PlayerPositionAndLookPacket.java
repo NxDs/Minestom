@@ -8,8 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record PlayerPositionAndLookPacket(Pos position, byte flags, int teleportId,
-                                          boolean dismountVehicle) implements ServerPacket {
+public record PlayerPositionAndLookPacket(Pos position, byte flags, int teleportId) implements ServerPacket {
 
     // Bitfield from https://wiki.vg/Protocol#Synchronize_Player_Position
     private static final byte FLAG_RELATIVE_X = 0x01;
@@ -30,7 +29,7 @@ public record PlayerPositionAndLookPacket(Pos position, byte flags, int teleport
 
     public PlayerPositionAndLookPacket(@NotNull NetworkBuffer reader) {
         this(new Pos(reader.read(DOUBLE), reader.read(DOUBLE), reader.read(DOUBLE), reader.read(FLOAT), reader.read(FLOAT)),
-                reader.read(BYTE), reader.read(VAR_INT), reader.read(BOOLEAN));
+                reader.read(BYTE), reader.read(VAR_INT));
     }
 
     @Override
@@ -44,7 +43,6 @@ public record PlayerPositionAndLookPacket(Pos position, byte flags, int teleport
 
         writer.write(BYTE, flags);
         writer.write(VAR_INT, teleportId);
-        writer.write(BOOLEAN, dismountVehicle);
     }
 
     @Override

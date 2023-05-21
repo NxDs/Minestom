@@ -312,6 +312,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             this.position = absolutePosition;
             refreshCoordinate(absolutePosition);
             synchronizePosition(true, relativePosition);
+            setView(absolutePosition.yaw(), absolutePosition.pitch());
         };
 
         if (chunks != null && chunks.length > 0) {
@@ -698,6 +699,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     private void touchTick() {
+        if (!hasPhysics) return;
+
         // TODO do not call every tick (it is pretty expensive)
         final Pos position = this.position;
         final BoundingBox boundingBox = this.boundingBox;
@@ -1579,7 +1582,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public @NotNull EntityMetaDataPacket getMetadataPacket() {
         return new EntityMetaDataPacket(getEntityId(), metadata.getEntries());
     }
-
 
     /**
      * Used to synchronize entity position with viewers by sending an
