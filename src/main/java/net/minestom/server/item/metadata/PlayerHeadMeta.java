@@ -19,7 +19,7 @@ import java.util.UUID;
 public record PlayerHeadMeta(TagReadable readable) implements ItemMetaView<PlayerHeadMeta.Builder> {
     public static final Tag<UUID> SKULL_OWNER = Tag.UUID("Id").path("SkullOwner");
     public static final Tag<PlayerSkin> SKIN = Tag.Structure("Properties", new TagSerializer<PlayerSkin>() {
-        public static final Tag<NBT> TEXTURES = Tag.NBT("textures");
+        private static final Tag<NBT> TEXTURES = Tag.NBT("textures");
 
         @Override
         public @Nullable PlayerSkin read(@NotNull TagReadable reader) {
