@@ -73,6 +73,8 @@ public class BlockPlacementListener {
             // Player didn't try to place a block but interacted with one
             PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, blockPosition, cursorPosition, blockFace);
             EventDispatcher.call(event);
+            // Ack the block change. This is required to reset the client prediction to the server state.
+            player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
             return;
         }
 
