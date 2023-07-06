@@ -490,6 +490,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Sends necessary packets to synchronize player data after a {@link RespawnPacket}
      */
     private void refreshClientStateAfterRespawn() {
+        sendPacket(new ServerDifficultyPacket(MinecraftServer.getDifficulty(), false));
         sendPacket(new UpdateHealthPacket(this.getHealth(), food, foodSaturation));
         sendPacket(new SetExperiencePacket(exp, level, 0));
         triggerStatus((byte) (24 + permissionLevel)); // Set permission level
@@ -654,7 +655,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     protected void spawnPlayer(@NotNull Instance instance, @NotNull Pos spawnPosition,
                              boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
-        if (!firstSpawn) {
+        if (!firstSpawn && !dimensionChange) {
             // Player instance changed, clear current viewable collections
             if (updateChunks)
                 ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(), chunkRemover);
@@ -675,8 +676,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         synchronizePosition(true); // So the player doesn't get stuck
 
+        if (dimensionChange) {
+            sendPacket(new SpawnPositionPacket(spawnPosition, 0)); // Without this the client gets stuck on loading terrain for a while
+            instance.getWorldBorder().init(this);
+            sendPacket(new TimeUpdatePacket(instance.getWorldAge(), instance.getTime()));
+        }
+
         if (dimensionChange || firstSpawn) {
             this.inventory.update();
+            sendPacket(new HeldItemChangePacket(heldSlot));
         }
 
         EventDispatcher.call(new PlayerSpawnEvent(this, instance, firstSpawn));
