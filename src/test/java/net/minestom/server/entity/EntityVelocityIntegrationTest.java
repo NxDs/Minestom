@@ -1,12 +1,12 @@
 package net.minestom.server.entity;
 
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -150,6 +150,7 @@ public class EntityVelocityIntegrationTest {
         assertFalse(entity.hasVelocity());
 
         entity.setInstance(instance, new Pos(0, 41, 0)).join();
+        entity.setVelocity(new Vec(0, -10, 0));
 
         env.tick();
 

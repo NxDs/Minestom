@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.github.HypeJet</groupId>
+    <artifactId>HypeStom-Kt</artifactId>
+    <version>7f6eaccd14</version>
+    <name>HypeJet/HypeStom-Kt</name>
+    <url>https://github.com/HypeJet/HypeStom-Kt</url>
+    <inceptionYear>2022</inceptionYear>
+    <developers>
+        <developer>
+            <id>HypeJet</id>
+            <name>HypeJet Minecraft Server</name>
+            <email></email>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git://github.com/HypeJet/HypeStom-Kt.git</connection>
+        <developerConnection>scm:git://github.com/HypeJet/HypeStom-Kt.git</developerConnection>
+        <url>git://github.com/HypeJet/HypeStom-Kt.git</url>
+    </scm>
+</project>

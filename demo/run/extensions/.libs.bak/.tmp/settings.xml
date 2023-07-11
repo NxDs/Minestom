@@ -1,0 +1,45 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd">
+    <localRepository>X:\IdeaProjects\Minecraft\SakuraNetwork\Minestom\SakuraMinestom\demo\run\extensions\.libs
+    </localRepository>
+    <profiles>
+        <profile>
+            <id>dependency-getter-auto</id>
+            <repositories>
+
+                <repository>
+                    <id>sponge</id>
+                    <name>sponge</name>
+                    <url>https://repo.spongepowered.org/repository/maven-public/</url>
+                    <layout>default</layout>
+                </repository>
+
+                <repository>
+                    <id>enginehub</id>
+                    <name>enginehub</name>
+                    <url>https://maven.enginehub.org/repo/</url>
+                    <layout>default</layout>
+                </repository>
+
+                <repository>
+                    <id>jitpack</id>
+                    <name>jitpack</name>
+                    <url>https://jitpack.io/</url>
+                    <layout>default</layout>
+                </repository>
+
+                <repository>
+                    <id>Central</id>
+                    <name>Central</name>
+                    <url>https://repo1.maven.org/maven2/</url>
+                    <layout>default</layout>
+                </repository>
+
+            </repositories>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>dependency-getter-auto</activeProfile>
+    </activeProfiles>
+</settings>
+            
