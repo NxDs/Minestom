@@ -365,8 +365,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Pos currentPosition = this.position;
         if (currentPosition.sameView(yaw, pitch)) return;
         this.position = currentPosition.withView(yaw, pitch);
-        sendPacketToViewersAndSelf(new EntityHeadLookPacket(getEntityId(), yaw));
-        sendPacketToViewersAndSelf(new EntityRotationPacket(getEntityId(), yaw, pitch, onGround));
+        synchronizeView();
     }
 
     /**
@@ -1604,6 +1603,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         PacketUtils.prepareViewablePacket(currentChunk, packet, this);
         this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
         this.lastSyncedPosition = posCache;
+    }
+
+    private void synchronizeView() {
+        sendPacketToViewersAndSelf(new EntityHeadLookPacket(getEntityId(), position.yaw()));
+        sendPacketToViewersAndSelf(new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround));
     }
 
     /**
