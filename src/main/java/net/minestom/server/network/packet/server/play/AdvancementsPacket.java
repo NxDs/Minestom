@@ -99,7 +99,8 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
 
     public record Advancement(@Nullable String parentIdentifier, @Nullable DisplayData displayData,
                               @NotNull List<String> criteria,
-                              @NotNull List<Requirement> requirements) implements NetworkBuffer.Writer, ComponentHolder<Advancement> {
+                              @NotNull List<Requirement> requirements,
+                              boolean sendTelemetryData) implements NetworkBuffer.Writer, ComponentHolder<Advancement> {
         public Advancement {
             criteria = List.copyOf(criteria);
             requirements = List.copyOf(requirements);
@@ -109,7 +110,8 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
             this(reader.read(BOOLEAN) ? reader.read(STRING) : null,
                     reader.read(BOOLEAN) ? new DisplayData(reader) : null,
                     reader.readCollection(STRING),
-                    reader.readCollection(Requirement::new));
+                    reader.readCollection(Requirement::new),
+                    reader.read(BOOLEAN));
         }
 
         @Override
@@ -118,6 +120,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
             writer.writeOptional(displayData);
             writer.writeCollection(STRING, criteria);
             writer.writeCollection(requirements);
+            writer.write(BOOLEAN, sendTelemetryData);
         }
 
         @Override
@@ -127,7 +130,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
 
         @Override
         public @NotNull Advancement copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-            return this.displayData == null ? this : new Advancement(this.parentIdentifier, this.displayData.copyWithOperator(operator), this.criteria, this.requirements);
+            return this.displayData == null ? this : new Advancement(this.parentIdentifier, this.displayData.copyWithOperator(operator), this.criteria, this.requirements, this.sendTelemetryData);
         }
     }
 
