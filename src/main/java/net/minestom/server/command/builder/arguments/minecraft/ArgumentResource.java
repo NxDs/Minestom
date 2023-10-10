@@ -20,7 +20,7 @@ public class ArgumentResource extends Argument<String> {
     }
 
     @Override
-    public @NotNull String parse(@NotNull String input) throws ArgumentSyntaxException {
+    public @NotNull String parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         if (input.contains(StringUtils.SPACE))
             throw new ArgumentSyntaxException("Resource location cannot contain space character", input, SPACE_ERROR);
 
