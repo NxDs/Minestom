@@ -52,7 +52,7 @@ kotlin-stdlib-jdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk
 
 # Miscellaneous
 dependencyGetter = { group = "com.github.Minestom", name = "DependencyGetter", version.ref = "dependencyGetter" }
-minestomData = { group = "net.minestom", name = "data", version.ref = "minestomData" }
+minestomData = { group = "dev.hollowcube", name = "minestom-ce-data", version.ref = "data" }
 jetbrainsAnnotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrainsAnnotations" }
 hephaistos-common = { group = "io.github.jglrxavpok.hephaistos", name = "common", version.ref = "hephaistos" }
 hephaistos-gson = { group = "io.github.jglrxavpok.hephaistos", name = "gson", version.ref = "hephaistos" }

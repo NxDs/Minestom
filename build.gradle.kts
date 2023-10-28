@@ -72,9 +72,6 @@ dependencies {
     api(libs.gson)
     implementation(libs.jcTools)
 
-    // Path finding
-    api(libs.hydrazine)
-
     // Extension Management System dependency handler.
     api(libs.dependencyGetter)
 
