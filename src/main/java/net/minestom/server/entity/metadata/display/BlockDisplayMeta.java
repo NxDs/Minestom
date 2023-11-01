@@ -14,7 +14,7 @@ public class BlockDisplayMeta extends AbstractDisplayMeta {
     }
 
     public int getBlockStateId() {
-        return super.metadata.getIndex(OFFSET, Block.AIR.stateId());
+        return super.metadata.getIndex(OFFSET, (int) Block.AIR.stateId());
     }
 
     public void setBlockState(int value) {
